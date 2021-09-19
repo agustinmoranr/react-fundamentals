@@ -6,19 +6,146 @@
   <script src="https://unpkg.com/react@17.0.0/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@17.0.0/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone@7.12.4/babel.js"></script>
+  <script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>
   <script type="text/babel">
     // 🐨 Make a function called `message` which returns the JSX we want to share
 
     // 🐨 use that function in place of the divs below with:
     // 💰 {message({children: 'Hello World'})} {message({children: 'Goodbye World'})}
-    const element = (
-      <div className="container">
-        <div className="message">Hello World</div>
-        <div className="message">Goodbye World</div>
-      </div>
+
+    const helloText = 'Hello World'
+    const goodbyeText = 'Goodbye World'
+
+    function message({children}) {
+      return <div className="message">{children}</div>
+    }
+
+    // const helloElement = message({children: helloText})
+    // const goodbyeElement = message({children: goodbyeText})
+
+    // const element = (
+    //   <div className="container">
+    //     {helloElement}
+    //     {goodbyeElement}
+    //   </div>
+    // )
+
+    //====extra credit one====
+    // const helloElement1 = React.createElement(message, {children: helloText})
+    // const otherElementRenderedDirectly = message({
+    //   children: 'No soy ni un hello ni un goodbyeee',
+    // })
+    // console.log({helloElement1, otherElementRenderedDirectly}) // type message _ref, type div
+    // //Cuando utilizanmos createElement react crea un nuevo compenente, a diferencia de cuando unicamente invocamos la función, react simplemente retorna los nodos
+
+    // //Al utilizar createElement react internamente no crea un DOM node, sino que crea un elemento que se almacena en memoria, y luego ejecuta la función para conocer los nodos que renderizará el página
+    // //mira las diferencias del renderizado en los react devtools
+    // const element1 = (
+    //   <div className="container">
+    //     {helloElement1}
+    //     {React.createElement(message, {children: goodbyeText})}
+    //     {otherElementRenderedDirectly}
+    //   </div>
+    // )
+
+    //extra credit 2
+    // function Message2({children}) {
+    //   return <div className="message">{children}</div>
+    // }
+
+    // const helloMessage2 = React.createElement(Message2, {children: helloText})
+    // const goodbyeMessage2 = <Message2>{goodbyeText}</Message2>
+    // //dos formas de representar nuestro componente, createEl vs jsx
+    // const element2 = (
+    //   <div className="container">
+    //     {helloMessage2}
+    //     {goodbyeMessage2}
+
+    //     <Message2>{helloText}</Message2>
+    //     <Message2>{goodbyeText}</Message2>
+    //   </div>
+    // )
+
+    //extra credit 3
+    // function Message3({subject, greeting}) {
+    //   return (
+    //     <div className="message">
+    //       {greeting}, {subject}
+    //     </div>
+    //   )
+    // }
+
+    // const CustomPropTypes = {
+    //   string(props, propName, componentName) {
+    //     console.log({props, propName, componentName})
+    //     if (typeof props[propName] !== 'string') {
+    //       return new Error(
+    //         `Error in component ${componentName}: The following property: ${propName}, is expecting a value of type string, but insted got a value of type ${typeof props[
+    //           propName
+    //         ]}`,
+    //       )
+    //     }
+    //   },
+    // }
+
+    // Message3.propTypes = {
+    //   subject: CustomPropTypes.string,
+    //   greeting: CustomPropTypes.string,
+    // }
+
+    // const element3 = (
+    //   <div className="container">
+    //     <Message3 greeting="Hello" subject={2} />
+    //     <Message3 greeting="Goodbye" subject="World" />
+    //   </div>
+    // )
+
+    //extra credit 4
+    // function Message4({subject, greeting}) {
+    //   return (
+    //     <div className="message">
+    //       {greeting}, {subject}
+    //     </div>
+    //   )
+    // }
+
+    // Message4.propTypes = {
+    //   subject: PropTypes.string.isRequired,
+    //   greeting: PropTypes.string.isRequired,
+    // }
+
+    // const element4 = (
+    //   <div className="container">
+    //     <Message4 greeting="Hello" subject={3} />
+    //     <Message4 greeting="Goodbye" subject="World" />
+    //   </div>
+    // )
+
+    // //extra credit 5, react fragment
+    function Message5({subject, greeting}) {
+      return (
+        <div className="message">
+          {greeting}, {subject}
+        </div>
+      )
+    }
+
+    //JSX
+    const element5 = (
+      <React.Fragment>
+        <Message5 greeting="Hello" subject="World" />
+        <Message5 greeting="Goodbye" subject="World" />
+      </React.Fragment>
     )
 
+    //High level API
+    const element5WithCreateElement = React.createElement(
+      React.Fragment,
+      null,
+      React.createElement(Message5, {greeting: 'Hello', subject: 'World'}),
+      React.createElement(Message5, {greeting: 'Goddbye', subject: 'World'}),
+    )
     // 💯 This is only the first step to making actual React components. The rest is in the extra credit!
-    ReactDOM.render(element, document.getElementById('root'))
+    ReactDOM.render(element5WithCreateElement, document.getElementById('root'))
   </script>
 </body>
